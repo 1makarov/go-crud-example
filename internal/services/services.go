@@ -3,7 +3,9 @@ package services
 import (
 	"context"
 	"github.com/1makarov/go-crud-example/internal/model"
+	authorization "github.com/1makarov/go-crud-example/internal/pkg/auth"
 	"github.com/1makarov/go-crud-example/internal/repository"
+	"github.com/1makarov/go-crud-example/internal/services/auth"
 	"github.com/1makarov/go-crud-example/internal/services/books"
 )
 
@@ -15,12 +17,19 @@ type Books interface {
 	UpdateByID(ctx context.Context, id int, v model.BookUpdateInput) error
 }
 
-type Service struct {
-	Books
+type Auth interface {
+	CreateToken() (string, error)
+	ValidToken(token string) error
 }
 
-func New(repo *repository.Repository) *Service {
+type Service struct {
+	Books
+	Auth
+}
+
+func New(repo *repository.Repository, a *authorization.Auth) *Service {
 	return &Service{
-		Books: books.Init(repo),
+		Books: books.Init(repo.Books),
+		Auth:  auth.Init(a.JWT),
 	}
 }

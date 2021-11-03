@@ -20,7 +20,7 @@ func NewRepo(db *sqlx.DB) *Books {
 func (b *Books) Create(ctx context.Context, v model.BookCreateInput) error {
 	if _, err := b.db.NamedExecContext(ctx, `
 
-	insert into book (name, title, isbn, description) values (:name, :title, :isbn, :description) returning id
+	insert into books (name, title, isbn, description) values (:name, :title, :isbn, :description)
 
 	`, v); err != nil {
 		return err
@@ -32,7 +32,7 @@ func (b *Books) Create(ctx context.Context, v model.BookCreateInput) error {
 func (b *Books) GetByID(ctx context.Context, id int) (*model.Book, error) {
 	var v model.Book
 
-	if err := b.db.GetContext(ctx, &v, `select * from book where id = $1`, id); err != nil {
+	if err := b.db.GetContext(ctx, &v, `select * from books where id = $1`, id); err != nil {
 		return nil, err
 	}
 
@@ -42,7 +42,7 @@ func (b *Books) GetByID(ctx context.Context, id int) (*model.Book, error) {
 func (b *Books) GetAll(ctx context.Context) ([]model.Book, error) {
 	var v []model.Book
 
-	if err := b.db.SelectContext(ctx, &v, `select * from book`); err != nil {
+	if err := b.db.SelectContext(ctx, &v, `select * from books`); err != nil {
 		return nil, err
 	}
 
@@ -50,7 +50,7 @@ func (b *Books) GetAll(ctx context.Context) ([]model.Book, error) {
 }
 
 func (b *Books) DeleteByID(ctx context.Context, id int) error {
-	if _, err := b.db.ExecContext(ctx, `delete from book where id = $1`, id); err != nil {
+	if _, err := b.db.ExecContext(ctx, `delete from books where id = $1`, id); err != nil {
 		return err
 	}
 

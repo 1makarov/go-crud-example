@@ -4,12 +4,14 @@ import (
 	d "github.com/1makarov/go-crud-example/internal/db"
 	"github.com/1makarov/go-crud-example/internal/db/postgres"
 	v1 "github.com/1makarov/go-crud-example/internal/delivery/http/v1"
+	authorization "github.com/1makarov/go-crud-example/internal/pkg/auth"
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
 	"github.com/1makarov/go-crud-example/internal/services"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
@@ -30,8 +32,13 @@ func main() {
 	}
 	defer db.Close()
 
+	auth, err := authorization.New(os.Getenv("SALT"), 5*time.Hour)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	repo := repository.New(db)
-	service := services.New(repo)
+	service := services.New(repo, auth)
 	handler := v1.NewHandler(service)
 
 	s := server.NewServer(os.Getenv("PORT"), handler.Init())

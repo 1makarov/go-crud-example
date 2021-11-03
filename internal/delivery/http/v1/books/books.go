@@ -13,10 +13,9 @@ type handler struct {
 	service services.Books
 }
 
-func InitRouter(service services.Books, r *gin.RouterGroup) {
+func InitRouter(service services.Books, books *gin.RouterGroup) {
 	h := handler{service: service}
 
-	books := r.Group("/books")
 	{
 		books.POST("/create", h.Create)
 		books.GET("/get/:id", h.GetByID)

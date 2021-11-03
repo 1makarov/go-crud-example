@@ -1,4 +1,4 @@
-create table book
+create table books
 (
     id          serial       not null unique,
     name        varchar(100) not null,
