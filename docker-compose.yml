@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: library-api
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - library
+
+
+  postgres:
+    image: postgres:latest
+    container_name: pg
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - ./database_db:/var/lib/postgresql/data/
+      - ./schema:/docker-entrypoint-initdb.d
+    networks:
+      - library
+
+networks:
+  library:
+    driver: bridge

@@ -8,16 +8,15 @@ import (
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
 	"github.com/1makarov/go-crud-example/internal/services"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"time"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalln(err)
-	}
+	//if err := godotenv.Load(); err != nil {
+	//	log.Fatalln(err)
+	//}
 
 	cfg := d.ConfigDB{
 		Host:     os.Getenv("POSTGRES_HOST"),
@@ -41,7 +40,7 @@ func main() {
 	service := services.New(repo, auth)
 	handler := v1.NewHandler(service)
 
-	s := server.NewServer(os.Getenv("PORT"), handler.Init())
+	s := server.NewServer(os.Getenv("APP_PORT"), handler.Init())
 
 	if err = s.Run(); err != nil {
 		log.Fatalf("error running server: %s\n", err.Error())
