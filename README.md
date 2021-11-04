@@ -1,13 +1,12 @@
 ## Build & Run
 ```
-apt update
-apt install docker.io
+apt install docker.io -y && apt install docker-compose -y
 
-git clone github.com/1makarov/go-crud-example
-
-// add .env file
+git clone https://github.com/1makarov/go-crud-example
 
 cd go-crud-example/
+
+// add .env file
 
 docker-compose up -d --build
 ```
