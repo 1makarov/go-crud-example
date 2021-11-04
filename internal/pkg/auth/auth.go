@@ -1,4 +1,4 @@
-package authorization
+package auth
 
 import (
 	"fmt"
@@ -11,7 +11,6 @@ const errNoSalt = "empty salt"
 type JWT interface {
 	New() (string, error)
 	Valid(token string) error
-	Refresh() (string, error)
 }
 
 type Auth struct {

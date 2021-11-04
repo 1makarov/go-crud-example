@@ -8,6 +8,7 @@ services:
       - ${APP_PORT}:${APP_PORT}
     depends_on:
       - postgres
+    restart: always
     env_file:
       - .env
     networks:

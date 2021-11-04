@@ -7,12 +7,12 @@ import (
 )
 
 type JWT struct {
-	salt string
-	ttl  time.Duration
+	signingKey string
+	ttl        time.Duration
 }
 
-func Init(salt string, ttl time.Duration) *JWT {
-	return &JWT{salt: salt, ttl: ttl}
+func Init(signingKey string, ttl time.Duration) *JWT {
+	return &JWT{signingKey: signingKey, ttl: ttl}
 }
 
 func (j *JWT) New() (string, error) {
@@ -20,7 +20,7 @@ func (j *JWT) New() (string, error) {
 		ExpiresAt: time.Now().Add(j.ttl).Unix(),
 	})
 
-	return token.SignedString([]byte(j.salt))
+	return token.SignedString([]byte(j.signingKey))
 }
 
 func (j *JWT) Valid(token string) error {
@@ -29,7 +29,7 @@ func (j *JWT) Valid(token string) error {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(j.salt), nil
+		return []byte(j.signingKey), nil
 	})
 
 	if err != nil {
@@ -37,8 +37,4 @@ func (j *JWT) Valid(token string) error {
 	}
 
 	return t.Claims.Valid()
-}
-
-func (j *JWT) Refresh() (string, error) {
-	return "", nil
 }

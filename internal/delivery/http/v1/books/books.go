@@ -2,7 +2,7 @@ package books
 
 import (
 	"fmt"
-	"github.com/1makarov/go-crud-example/internal/model"
+	"github.com/1makarov/go-crud-example/internal/types"
 	"github.com/1makarov/go-crud-example/internal/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -26,7 +26,7 @@ func InitRouter(service services.Books, books *gin.RouterGroup) {
 }
 
 func (h *handler) Create(c *gin.Context) {
-	var v model.BookCreateInput
+	var v types.BookCreateInput
 
 	if err := c.BindJSON(&v); err != nil {
 		newResponse(c, http.StatusBadRequest, err)
@@ -107,7 +107,7 @@ func (h *handler) UpdateByID(c *gin.Context) {
 		return
 	}
 
-	var book model.BookUpdateInput
+	var book types.BookUpdateInput
 
 	if err = c.BindJSON(&book); err != nil {
 		newResponse(c, http.StatusBadRequest, err)

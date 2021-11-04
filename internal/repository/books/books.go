@@ -3,7 +3,7 @@ package books
 import (
 	"context"
 	"fmt"
-	"github.com/1makarov/go-crud-example/internal/model"
+	"github.com/1makarov/go-crud-example/internal/types"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -17,7 +17,7 @@ func NewRepo(db *sqlx.DB) *Books {
 	}
 }
 
-func (b *Books) Create(ctx context.Context, v model.BookCreateInput) error {
+func (b *Books) Create(ctx context.Context, v types.BookCreateInput) error {
 	if _, err := b.db.NamedExecContext(ctx, `
 
 	insert into books (name, title, isbn, description) values (:name, :title, :isbn, :description)
@@ -29,8 +29,8 @@ func (b *Books) Create(ctx context.Context, v model.BookCreateInput) error {
 	return nil
 }
 
-func (b *Books) GetByID(ctx context.Context, id int) (*model.Book, error) {
-	var v model.Book
+func (b *Books) GetByID(ctx context.Context, id int) (*types.Book, error) {
+	var v types.Book
 
 	if err := b.db.GetContext(ctx, &v, `select * from books where id = $1`, id); err != nil {
 		return nil, err
@@ -39,11 +39,15 @@ func (b *Books) GetByID(ctx context.Context, id int) (*model.Book, error) {
 	return &v, nil
 }
 
-func (b *Books) GetAll(ctx context.Context) ([]model.Book, error) {
-	var v []model.Book
+func (b *Books) GetAll(ctx context.Context) ([]types.Book, error) {
+	var v []types.Book
 
 	if err := b.db.SelectContext(ctx, &v, `select * from books`); err != nil {
 		return nil, err
+	}
+
+	if len(v) == 0 {
+		v = []types.Book{}
 	}
 
 	return v, nil
@@ -57,7 +61,7 @@ func (b *Books) DeleteByID(ctx context.Context, id int) error {
 	return nil
 }
 
-func (b *Books) UpdateByID(ctx context.Context, id int, v model.BookUpdateInput) error {
+func (b *Books) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput) error {
 	var query string
 
 	if v.Description != nil {
@@ -73,7 +77,7 @@ func (b *Books) UpdateByID(ctx context.Context, id int, v model.BookUpdateInput)
 		query += fmt.Sprintf("title = '%s' ", *v.Title)
 	}
 
-	r := fmt.Sprintf("update book set %s where id = %d", query[:len(query)-1], id)
+	r := fmt.Sprintf("update books set %s where id = %d", query[:len(query)-1], id)
 
 	if _, err := b.db.ExecContext(ctx, r); err != nil {
 		return err

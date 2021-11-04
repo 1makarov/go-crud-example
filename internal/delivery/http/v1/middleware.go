@@ -13,6 +13,7 @@ func (h *Handler) validAuth(c *gin.Context) {
 	header := strings.Split(c.GetHeader("Authorization"), " ")
 	if len(header) != 2 {
 		newResponse(c, http.StatusUnauthorized, fmt.Errorf(errAuth))
+		return
 	}
 
 	if err := h.services.Auth.ValidToken(header[1]); err != nil {
