@@ -25,11 +25,10 @@ JWT_SIGNING_KEY=cVRFw)29qgC|d4p
     URL                           HTTP Method  Operation
     /api/v1/auth/create           GET          returns an auth key
 
+    /api/v1/books/create          POST         create new book
     /api/v1/books/get/:id         GET          returns the book with id of :id
     /api/v1/books/get-all         GET          returns an array of books
-    /api/v1/books/create          POST         create new book
     /api/v1/books/update/:id      POST         update the book by :id
-    /api/v1/books/get/:id         GET          returns the book with id of :id
     /api/v1/books/delete/:id      DELETE       delete a book by :id
 
 
