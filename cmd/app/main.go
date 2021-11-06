@@ -26,7 +26,7 @@ func main() {
 		DBName:   os.Getenv("POSTGRES_DB"),
 	}
 
-	d, err := postgres.Open(cfg)
+	d, err := postgres.Opn(cfg)
 	if err != nil {
 		logrus.Fatalf("error open db: %s\n", err.Error())
 	}
@@ -43,7 +43,7 @@ func main() {
 	s := server.NewServer(os.Getenv("APP_PORT"), handler.Init())
 	go func() {
 		if err = s.Run(); err != nil {
-			logrus.Faalf("error occured while running http server: %s", err.Error())
+			logrus.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
 
