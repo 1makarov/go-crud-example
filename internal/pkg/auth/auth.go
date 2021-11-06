@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const errNoSalt = "empty salt"
+const errNoSingKey = "empty sign key"
 
 type JWT interface {
 	New() (string, error)
@@ -19,7 +19,7 @@ type Auth struct {
 
 func New(salt string, ttl time.Duration) (*Auth, error) {
 	if salt == "" {
-		return nil, fmt.Errorf(errNoSalt)
+		return nil, fmt.Errorf(errNoSingKey)
 	}
 
 	return &Auth{

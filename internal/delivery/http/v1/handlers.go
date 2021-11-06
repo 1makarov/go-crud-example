@@ -1,8 +1,6 @@
 package v1
 
 import (
-	"github.com/1makarov/go-crud-example/internal/delivery/http/v1/auth"
-	"github.com/1makarov/go-crud-example/internal/delivery/http/v1/books"
 	"github.com/1makarov/go-crud-example/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -22,15 +20,8 @@ func (h *Handler) Init() *gin.Engine {
 	{
 		v1 := api.Group("/v1")
 		{
-			a := v1.Group("/auth")
-			{
-				auth.InitRouter(h.services.Auth, a)
-			}
-
-			b := v1.Group("/books", h.validAuth)
-			{
-				books.InitRouter(h.services.Books, b)
-			}
+			h.InitAuthRouter(v1)
+			h.InitBooksRouter(v1)
 		}
 	}
 

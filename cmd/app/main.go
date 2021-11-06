@@ -9,7 +9,7 @@ import (
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
 	"github.com/1makarov/go-crud-example/internal/services"
-	"log"
+	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"syscall"
@@ -17,6 +17,8 @@ import (
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+
 	cfg := db.ConfigDB{
 		Host:     os.Getenv("POSTGRES_HOST"),
 		User:     os.Getenv("POSTGRES_USER"),
@@ -26,12 +28,12 @@ func main() {
 
 	d, err := postgres.Open(cfg)
 	if err != nil {
-		log.Fatalf("error open db: %s\n", err.Error())
+		logrus.Fatalf("error open db: %s\n", err.Error())
 	}
 
 	a, err := auth.New(os.Getenv("JWT_SIGNING_KEY"), 5*time.Hour)
 	if err != nil {
-		log.Fatalf("error create auth: %s\n", err.Error())
+		logrus.Fatalf("error create auth: %s\n", err.Error())
 	}
 
 	repo := repository.New(d)
@@ -41,21 +43,21 @@ func main() {
 	s := server.NewServer(os.Getenv("APP_PORT"), handler.Init())
 	go func() {
 		if err = s.Run(); err != nil {
-			log.Fatalf("error occured while running http server: %s", err.Error())
+			logrus.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
 
-	log.Println("LibraryApp started")
+	logrus.Println("LibraryApp started")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
 	if err = s.Shutdown(context.Background()); err != nil {
-		log.Printf("error occured on server shutting down: %s", err.Error())
+		logrus.Printf("error occured on server shutting down: %s", err.Error())
 	}
 
 	if err = d.Close(); err != nil {
-		log.Printf("error occured on db connection close: %s", err.Error())
+		logrus.Printf("error occured on db connection close: %s", err.Error())
 	}
 }

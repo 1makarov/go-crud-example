@@ -1,31 +1,25 @@
-package books
+package v1
 
 import (
 	"fmt"
 	"github.com/1makarov/go-crud-example/internal/types"
-	"github.com/1makarov/go-crud-example/internal/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
 
-type handler struct {
-	service services.Books
-}
-
-func InitRouter(service services.Books, books *gin.RouterGroup) {
-	h := handler{service: service}
-
+func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
+	auth := v1.Group("/books", h.validAuth)
 	{
-		books.POST("/create", h.Create)
-		books.GET("/get/:id", h.GetByID)
-		books.GET("/get-all", h.GetAll)
-		books.DELETE("/delete/:id", h.DeleteByID)
-		books.POST("/update/:id", h.UpdateByID)
+		auth.POST("/create", h.Create)
+		auth.GET("/get/:id", h.GetByID)
+		auth.GET("/get-all", h.GetAll)
+		auth.DELETE("/delete/:id", h.DeleteByID)
+		auth.POST("/update/:id", h.UpdateByID)
 	}
 }
 
-func (h *handler) Create(c *gin.Context) {
+func (h *Handler) Create(c *gin.Context) {
 	var v types.BookCreateInput
 
 	if err := c.BindJSON(&v); err != nil {
@@ -33,7 +27,7 @@ func (h *handler) Create(c *gin.Context) {
 		return
 	}
 
-	if err := h.service.Create(c.Request.Context(), v); err != nil {
+	if err := h.services.Books.Create(c.Request.Context(), v); err != nil {
 		newResponse(c, http.StatusInternalServerError, err)
 		return
 	}
@@ -41,7 +35,7 @@ func (h *handler) Create(c *gin.Context) {
 	c.Status(http.StatusCreated)
 }
 
-func (h *handler) GetByID(c *gin.Context) {
+func (h *Handler) GetByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
 	if !ok {
 		newResponse(c, http.StatusBadRequest, fmt.Errorf("empty id"))
@@ -54,7 +48,7 @@ func (h *handler) GetByID(c *gin.Context) {
 		return
 	}
 
-	book, err := h.service.GetByID(c.Request.Context(), id)
+	book, err := h.services.Books.GetByID(c.Request.Context(), id)
 	if err != nil {
 		newResponse(c, http.StatusInternalServerError, err)
 		return
@@ -63,8 +57,8 @@ func (h *handler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, book)
 }
 
-func (h *handler) GetAll(c *gin.Context) {
-	books, err := h.service.GetAll(c.Request.Context())
+func (h *Handler) GetAll(c *gin.Context) {
+	books, err := h.services.Books.GetAll(c.Request.Context())
 	if err != nil {
 		newResponse(c, http.StatusInternalServerError, err)
 		return
@@ -73,7 +67,7 @@ func (h *handler) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
-func (h *handler) DeleteByID(c *gin.Context) {
+func (h *Handler) DeleteByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
 	if !ok {
 		newResponse(c, http.StatusBadRequest, fmt.Errorf("empty isbn"))
@@ -86,7 +80,7 @@ func (h *handler) DeleteByID(c *gin.Context) {
 		return
 	}
 
-	if err = h.service.DeleteByID(c.Request.Context(), id); err != nil {
+	if err = h.services.Books.DeleteByID(c.Request.Context(), id); err != nil {
 		newResponse(c, http.StatusInternalServerError, err)
 		return
 	}
@@ -94,7 +88,7 @@ func (h *handler) DeleteByID(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (h *handler) UpdateByID(c *gin.Context) {
+func (h *Handler) UpdateByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
 	if !ok {
 		newResponse(c, http.StatusBadRequest, fmt.Errorf("empty isbn"))
@@ -114,7 +108,7 @@ func (h *handler) UpdateByID(c *gin.Context) {
 		return
 	}
 
-	if err = h.service.UpdateByID(c.Request.Context(), id, book); err != nil {
+	if err = h.services.Books.UpdateByID(c.Request.Context(), id, book); err != nil {
 		newResponse(c, http.StatusInternalServerError, err)
 		return
 	}
