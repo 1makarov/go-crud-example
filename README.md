@@ -8,7 +8,7 @@ cd go-crud-example/
 docker-compose up -d --build
 ```
 
-##.env file:
+## .env:
 
 ```dotenv
 POSTGRES_DB=library
@@ -34,7 +34,7 @@ JWT_SIGNING_KEY=cVRFw)29qgC|d4p
 
 
 
-##book struct
+## Book struct
 ```go
 type Book struct {
 	ID          int    `json:"id"`

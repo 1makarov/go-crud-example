@@ -26,7 +26,7 @@ func main() {
 		DBName:   os.Getenv("POSTGRES_DB"),
 	}
 
-	d, err := postgres.Opn(cfg)
+	d, err := postgres.Open(cfg)
 	if err != nil {
 		logrus.Fatalf("error open db: %s\n", err.Error())
 	}
