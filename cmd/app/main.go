@@ -43,7 +43,7 @@ func main() {
 	s := server.NewServer(os.Getenv("APP_PORT"), handler.Init())
 	go func() {
 		if err = s.Run(); err != nil {
-			logrus.Fatalf("error occured while running http server: %s", err.Error())
+			logrus.Faalf("error occured while running http server: %s", err.Error())
 		}
 	}()
 
