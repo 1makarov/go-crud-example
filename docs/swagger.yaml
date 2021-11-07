@@ -1,0 +1,262 @@
+basePath: /
+definitions:
+  types.Book:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      isbn:
+        type: string
+      name:
+        type: string
+      title:
+        type: string
+    type: object
+  types.BookCreateInput:
+    properties:
+      description:
+        type: string
+      isbn:
+        type: string
+      name:
+        type: string
+      title:
+        type: string
+    required:
+    - description
+    - isbn
+    - name
+    - title
+    type: object
+  types.BookUpdateInput:
+    properties:
+      description:
+        type: string
+      isbn:
+        type: string
+      name:
+        type: string
+      title:
+        type: string
+    type: object
+  v1.response:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API Server for Library Application
+  title: Library App API
+  version: "1.0"
+paths:
+  /api/v1/auth/create:
+    get:
+      description: create auth token
+      operationId: create-auth-token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: CreateToken
+      tags:
+      - auth
+  /api/v1/books/create:
+    post:
+      consumes:
+      - application/json
+      description: create book
+      operationId: create-book
+      parameters:
+      - description: book create info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.BookCreateInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Create
+      tags:
+      - book
+  /api/v1/books/delete/{id}:
+    delete:
+      description: delete book by id
+      operationId: delete-book-by-id
+      parameters:
+      - description: search id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Delete by id
+      tags:
+      - book
+  /api/v1/books/get-all:
+    get:
+      description: get all books
+      operationId: get-all-books
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Book'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Get all
+      tags:
+      - book
+  /api/v1/books/get/{id}:
+    get:
+      description: get book by id
+      operationId: get-book-by-id
+      parameters:
+      - description: search id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Get by id
+      tags:
+      - book
+  /api/v1/books/update/{id}:
+    post:
+      consumes:
+      - application/json
+      description: update book by id
+      operationId: update-book-by-id
+      parameters:
+      - description: search id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: book update info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.BookUpdateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Update by id
+      tags:
+      - book
+securityDefinitions:
+  AuthKey:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
