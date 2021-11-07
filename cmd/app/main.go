@@ -10,7 +10,6 @@ import (
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
 	"github.com/1makarov/go-crud-example/internal/services"
-	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -30,10 +29,6 @@ import (
 
 func main() {
 	docs.SwaggerInfo.Host = "localhost" + os.Getenv("APP_PORT")
-
-	if err := godotenv.Load(); err != nil {
-		logrus.Fatalf("error loading env variables: %s", err.Error())
-	}
 
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
