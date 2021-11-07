@@ -12,6 +12,16 @@ func (h *Handler) InitAuthRouter(v1 *gin.RouterGroup) {
 	}
 }
 
+// CreateToken
+// @Summary Create
+// @Tags auth
+// @Description create auth token
+// @ID create-auth-token
+// @Produce json
+// @Success 200 {string} string "token"
+// @Failure 400,404 {object} response
+// @Failure default {object} response
+// @Router /api/v1/auth/create [get]
 func (h *Handler) CreateToken(c *gin.Context) {
 	token, err := h.services.Auth.CreateToken()
 	if err != nil {
@@ -19,7 +29,7 @@ func (h *Handler) CreateToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, map[string]interface{}{
+	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": token,
 	})
 }

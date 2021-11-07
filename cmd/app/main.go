@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/1makarov/go-crud-example/docs"
 	"github.com/1makarov/go-crud-example/internal/db"
 	"github.com/1makarov/go-crud-example/internal/db/postgres"
 	"github.com/1makarov/go-crud-example/internal/delivery/http/v1"
@@ -9,6 +10,7 @@ import (
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
 	"github.com/1makarov/go-crud-example/internal/services"
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
@@ -16,7 +18,23 @@ import (
 	"time"
 )
 
+// @title Library App API
+// @version 1.0
+// @description API Server for Library Application
+
+// @BasePath /
+
+// @securityDefinitions.apikey AuthKey
+// @in header
+// @name Authorization
+
 func main() {
+	docs.SwaggerInfo.Host = "localhost" + os.Getenv("APP_PORT")
+
+	if err := godotenv.Load(); err != nil {
+		logrus.Fatalf("error loading env variables: %s", err.Error())
+	}
+
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
 	cfg := db.ConfigDB{

@@ -3,6 +3,9 @@ package v1
 import (
 	"github.com/1makarov/go-crud-example/internal/services"
 	"github.com/gin-gonic/gin"
+
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 type Handler struct {
@@ -15,6 +18,8 @@ func NewHandler(services *services.Service) *Handler {
 
 func (h *Handler) Init() *gin.Engine {
 	router := gin.Default()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	api := router.Group("/api")
 	{

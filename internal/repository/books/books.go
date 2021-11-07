@@ -54,8 +54,18 @@ func (b *Books) GetAll(ctx context.Context) ([]types.Book, error) {
 }
 
 func (b *Books) DeleteByID(ctx context.Context, id int) error {
-	if _, err := b.db.ExecContext(ctx, `delete from books where id = $1`, id); err != nil {
+	result, err := b.db.ExecContext(ctx, `delete from books where id = $1`, id)
+	if err != nil {
 		return err
+	}
+
+	row, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if row == 0 {
+		return fmt.Errorf("book not found")
 	}
 
 	return nil
@@ -79,8 +89,18 @@ func (b *Books) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput)
 
 	r := fmt.Sprintf("update books set %s where id = %d", query[:len(query)-1], id)
 
-	if _, err := b.db.ExecContext(ctx, r); err != nil {
+	result, err := b.db.ExecContext(ctx, r)
+	if err != nil {
 		return err
+	}
+
+	row, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if row == 0 {
+		return fmt.Errorf("book not found")
 	}
 
 	return nil
