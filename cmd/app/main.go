@@ -42,6 +42,7 @@ func main() {
 		User:     os.Getenv("POSTGRES_USER"),
 		Password: os.Getenv("POSTGRES_PASSWORD"),
 		DBName:   os.Getenv("POSTGRES_DB"),
+		Port:     os.Getenv("DB_PORT"),
 	}
 
 	d, err := postgres.Open(cfg)

@@ -20,7 +20,7 @@ services:
     container_name: pg
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - ${DB_PORT}:${DB_PORT}
     env_file:
       - .env
     volumes:
