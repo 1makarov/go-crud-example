@@ -25,36 +25,20 @@ var doc = `{
     "paths": {
         "/api/v1/auth/create": {
             "get": {
-                "description": "create auth token",
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "CreateToken",
+                "summary": "Create",
                 "operationId": "create-auth-token",
                 "responses": {
                     "200": {
-                        "description": "token",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/v1.responseToken"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -69,13 +53,6 @@ var doc = `{
                         "AuthKey": []
                     }
                 ],
-                "description": "create book",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "book"
                 ],
@@ -83,7 +60,7 @@ var doc = `{
                 "operationId": "create-book",
                 "parameters": [
                     {
-                        "description": "book create info",
+                        "description": "info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -102,20 +79,8 @@ var doc = `{
                             "$ref": "#/definitions/v1.response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -130,7 +95,6 @@ var doc = `{
                         "AuthKey": []
                     }
                 ],
-                "description": "delete book by id",
                 "tags": [
                     "book"
                 ],
@@ -139,7 +103,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "search id",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -147,7 +111,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -155,20 +119,8 @@ var doc = `{
                             "$ref": "#/definitions/v1.response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -183,7 +135,6 @@ var doc = `{
                         "AuthKey": []
                     }
                 ],
-                "description": "get all books",
                 "tags": [
                     "book"
                 ],
@@ -201,12 +152,6 @@ var doc = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -230,7 +175,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "search id",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -277,13 +222,6 @@ var doc = `{
                         "AuthKey": []
                     }
                 ],
-                "description": "update book by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "book"
                 ],
@@ -292,13 +230,13 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "search id",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "book update info",
+                        "description": "info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -309,7 +247,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -317,20 +255,8 @@ var doc = `{
                             "$ref": "#/definitions/v1.response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -404,6 +330,14 @@ var doc = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.responseToken": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }

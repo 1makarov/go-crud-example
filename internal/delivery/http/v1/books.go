@@ -23,15 +23,11 @@ func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
 // @Summary Create
 // @Security AuthKey
 // @Tags book
-// @Description create book
 // @ID create-book
-// @Accept  json
-// @Produce  json
-// @Param input body types.BookCreateInput true "book create info"
+// @Param input body types.BookCreateInput true "info"
 // @Success 201 "OK"
-// @Failure 400,404 {object} response
+// @Failure 400 {object} response
 // @Failure 500 {object} response
-// @Failure default {object} response
 // @Router /api/v1/books/create [post]
 func (h *Handler) Create(c *gin.Context) {
 	var v types.BookCreateInput
@@ -55,7 +51,7 @@ func (h *Handler) Create(c *gin.Context) {
 // @Tags book
 // @Description get book by id
 // @ID get-book-by-id
-// @Param id path string true "search id"
+// @Param id path string true "id"
 // @Success 200 {object} types.Book
 // @Failure 400,404 {object} response
 // @Failure 500 {object} response
@@ -87,11 +83,9 @@ func (h *Handler) GetByID(c *gin.Context) {
 // @Summary Get all
 // @Security AuthKey
 // @Tags book
-// @Description get all books
 // @ID get-all-books
 // @Success 200 {object} []types.Book
 // @Failure 500 {object} response
-// @Failure default {object} response
 // @Router /api/v1/books/get-all [get]
 func (h *Handler) GetAll(c *gin.Context) {
 	books, err := h.services.Books.GetAll(c.Request.Context())
@@ -107,13 +101,11 @@ func (h *Handler) GetAll(c *gin.Context) {
 // @Summary Delete by id
 // @Security AuthKey
 // @Tags book
-// @Description delete book by id
 // @ID delete-book-by-id
-// @Param id path string true "search id"
+// @Param id path string true "id"
 // @Success 200 "OK"
-// @Failure 400,404 {object} response
+// @Failure 400 {object} response
 // @Failure 500 {object} response
-// @Failure default {object} response
 // @Router /api/v1/books/delete/{id} [delete]
 func (h *Handler) DeleteByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
@@ -140,16 +132,12 @@ func (h *Handler) DeleteByID(c *gin.Context) {
 // @Summary Update by id
 // @Security AuthKey
 // @Tags book
-// @Description update book by id
 // @ID update-book-by-id
-// @Param id path string true "search id"
-// @Accept json
-// @Produce json
-// @Param input body types.BookUpdateInput true "book update info"
+// @Param id path string true "id"
+// @Param input body types.BookUpdateInput true "info"
 // @Success 200 "OK"
-// @Failure 400,404 {object} response
+// @Failure 400 {object} response
 // @Failure 500 {object} response
-// @Failure default {object} response
 // @Router /api/v1/books/update/{id} [post]
 func (h *Handler) UpdateByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")

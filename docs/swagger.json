@@ -10,36 +10,20 @@
     "paths": {
         "/api/v1/auth/create": {
             "get": {
-                "description": "create auth token",
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "CreateToken",
+                "summary": "Create",
                 "operationId": "create-auth-token",
                 "responses": {
                     "200": {
-                        "description": "token",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/v1.responseToken"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -54,13 +38,6 @@
                         "AuthKey": []
                     }
                 ],
-                "description": "create book",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "book"
                 ],
@@ -68,7 +45,7 @@
                 "operationId": "create-book",
                 "parameters": [
                     {
-                        "description": "book create info",
+                        "description": "info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -87,20 +64,8 @@
                             "$ref": "#/definitions/v1.response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -115,7 +80,6 @@
                         "AuthKey": []
                     }
                 ],
-                "description": "delete book by id",
                 "tags": [
                     "book"
                 ],
@@ -124,7 +88,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "search id",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -132,7 +96,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -140,20 +104,8 @@
                             "$ref": "#/definitions/v1.response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -168,7 +120,6 @@
                         "AuthKey": []
                     }
                 ],
-                "description": "get all books",
                 "tags": [
                     "book"
                 ],
@@ -186,12 +137,6 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -215,7 +160,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "search id",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -262,13 +207,6 @@
                         "AuthKey": []
                     }
                 ],
-                "description": "update book by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "book"
                 ],
@@ -277,13 +215,13 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "search id",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "book update info",
+                        "description": "info",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -294,7 +232,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -302,20 +240,8 @@
                             "$ref": "#/definitions/v1.response"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/v1.response"
                         }
@@ -389,6 +315,14 @@
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.responseToken": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }

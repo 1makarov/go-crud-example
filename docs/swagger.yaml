@@ -45,6 +45,11 @@ definitions:
       message:
         type: string
     type: object
+  v1.responseToken:
+    properties:
+      token:
+        type: string
+    type: object
 info:
   contact: {}
   description: API Server for Library Application
@@ -53,45 +58,29 @@ info:
 paths:
   /api/v1/auth/create:
     get:
-      description: create auth token
       operationId: create-auth-token
-      produces:
-      - application/json
       responses:
         "200":
-          description: token
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/v1.responseToken'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/v1.response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/v1.response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/v1.response'
-      summary: CreateToken
+      summary: Create
       tags:
       - auth
   /api/v1/books/create:
     post:
-      consumes:
-      - application/json
-      description: create book
       operationId: create-book
       parameters:
-      - description: book create info
+      - description: info
         in: body
         name: input
         required: true
         schema:
           $ref: '#/definitions/types.BookCreateInput'
-      produces:
-      - application/json
       responses:
         "201":
           description: OK
@@ -99,16 +88,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/v1.response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/v1.response'
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/v1.response'
-        default:
-          description: ""
           schema:
             $ref: '#/definitions/v1.response'
       security:
@@ -118,31 +99,22 @@ paths:
       - book
   /api/v1/books/delete/{id}:
     delete:
-      description: delete book by id
       operationId: delete-book-by-id
       parameters:
-      - description: search id
+      - description: id
         in: path
         name: id
         required: true
         type: string
       responses:
         "200":
-          description: ""
+          description: OK
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/v1.response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/v1.response'
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/v1.response'
-        default:
-          description: ""
           schema:
             $ref: '#/definitions/v1.response'
       security:
@@ -152,7 +124,6 @@ paths:
       - book
   /api/v1/books/get-all:
     get:
-      description: get all books
       operationId: get-all-books
       responses:
         "200":
@@ -165,10 +136,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/v1.response'
       security:
       - AuthKey: []
       summary: Get all
@@ -179,7 +146,7 @@ paths:
       description: get book by id
       operationId: get-book-by-id
       parameters:
-      - description: search id
+      - description: id
         in: path
         name: id
         required: true
@@ -212,41 +179,28 @@ paths:
       - book
   /api/v1/books/update/{id}:
     post:
-      consumes:
-      - application/json
-      description: update book by id
       operationId: update-book-by-id
       parameters:
-      - description: search id
+      - description: id
         in: path
         name: id
         required: true
         type: string
-      - description: book update info
+      - description: info
         in: body
         name: input
         required: true
         schema:
           $ref: '#/definitions/types.BookUpdateInput'
-      produces:
-      - application/json
       responses:
         "200":
-          description: ""
+          description: OK
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/v1.response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/v1.response'
         "500":
           description: Internal Server Error
-          schema:
-            $ref: '#/definitions/v1.response'
-        default:
-          description: ""
           schema:
             $ref: '#/definitions/v1.response'
       security:
