@@ -8,7 +8,7 @@ docker-compose up -d --build
 ```
 ## Swagger
 ```
-http://localhost:env/swagger/index.html#/
+http://host:port/swagger/index.html#/
 ```
 ## .env
 
