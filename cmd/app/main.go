@@ -28,7 +28,7 @@ import (
 // @name Authorization
 
 func main() {
-	docs.SwaggerInfo.Host = "localhost" + os.Getenv("APP_PORT")
+	docs.SwaggerInfo.Host = "localhost:" + os.Getenv("APP_PORT")
 
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
