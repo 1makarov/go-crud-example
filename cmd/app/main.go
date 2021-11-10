@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"github.com/1makarov/go-crud-example/docs"
 	"github.com/1makarov/go-crud-example/internal/db"
 	"github.com/1makarov/go-crud-example/internal/db/postgres"
 	"github.com/1makarov/go-crud-example/internal/delivery/http/v1"
@@ -21,6 +20,7 @@ import (
 // @version 1.0
 // @description API Server for Library Application
 
+// @host localhost:3001
 // @BasePath /
 
 // @securityDefinitions.apikey AuthKey
@@ -28,8 +28,6 @@ import (
 // @name Authorization
 
 func main() {
-	docs.SwaggerInfo.Host = "localhost:" + os.Getenv("APP_PORT")
-
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
 	cfg := db.ConfigDB{

@@ -50,6 +50,7 @@ definitions:
       token:
         type: string
     type: object
+host: localhost:3001
 info:
   contact: {}
   description: API Server for Library Application
