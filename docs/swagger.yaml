@@ -1,0 +1,213 @@
+definitions:
+  types.Book:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      isbn:
+        type: string
+      name:
+        type: string
+      title:
+        type: string
+    type: object
+  types.BookCreateInput:
+    properties:
+      description:
+        type: string
+      isbn:
+        type: string
+      name:
+        type: string
+      title:
+        type: string
+    required:
+    - description
+    - isbn
+    - name
+    - title
+    type: object
+  types.BookUpdateInput:
+    properties:
+      description:
+        type: string
+      isbn:
+        type: string
+      name:
+        type: string
+      title:
+        type: string
+    type: object
+  v1.response:
+    properties:
+      message:
+        type: string
+    type: object
+  v1.responseToken:
+    properties:
+      token:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for Library Application
+  title: Library App API
+  version: "1.0"
+paths:
+  /api/v1/auth/:
+    get:
+      operationId: create-auth-token
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.responseToken'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Create
+      tags:
+      - auth
+  /api/v1/books/:
+    get:
+      operationId: get-all-books
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Book'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Get all
+      tags:
+      - book
+    post:
+      operationId: create-book
+      parameters:
+      - description: info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.BookCreateInput'
+      responses:
+        "201":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Create
+      tags:
+      - book
+  /api/v1/books/{id}:
+    delete:
+      operationId: delete-book-by-id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Delete by id
+      tags:
+      - book
+    get:
+      description: get book by id
+      operationId: get-book-by-id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Get by id
+      tags:
+      - book
+    put:
+      operationId: update-book-by-id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.BookUpdateInput'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Update by id
+      tags:
+      - book
+securityDefinitions:
+  AuthKey:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
