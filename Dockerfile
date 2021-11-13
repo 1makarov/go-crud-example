@@ -12,6 +12,7 @@ FROM alpine:latest
 
 WORKDIR /root/
 
-COPY --from=0 /github.com/1makarov/go-crud-example/.bin/app .
+COPY --from=builder /github.com/1makarov/go-crud-example/.bin/app .
+COPY --from=builder /github.com/1makarov/go-crud-example/configs configs/
 
 CMD ["./app"]

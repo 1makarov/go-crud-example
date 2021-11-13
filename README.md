@@ -8,7 +8,7 @@ docker-compose up -d --build
 ```
 ## Swagger
 ```
-http://localhost:3001/swagger/index.html
+http://localhost:8080/swagger/index.html
 ```
 ## .env
 
@@ -18,6 +18,5 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_USER=root
 POSTGRES_HOST=postgres
 
-APP_PORT=80
 JWT_SIGNING_KEY=cVRFw)29qgC|d4p
 ```

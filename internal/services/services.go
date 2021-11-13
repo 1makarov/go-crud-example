@@ -2,9 +2,8 @@ package services
 
 import (
 	"context"
-	authorization "github.com/1makarov/go-crud-example/internal/pkg/auth"
+	"github.com/1makarov/go-cache"
 	"github.com/1makarov/go-crud-example/internal/repository"
-	"github.com/1makarov/go-crud-example/internal/services/auth"
 	"github.com/1makarov/go-crud-example/internal/services/books"
 	"github.com/1makarov/go-crud-example/internal/types"
 )
@@ -17,19 +16,12 @@ type Books interface {
 	UpdateByID(ctx context.Context, id int, v types.BookUpdateInput) error
 }
 
-type Auth interface {
-	CreateToken() (string, error)
-	ValidToken(token string) error
-}
-
 type Service struct {
 	Books
-	Auth
 }
 
-func New(repo *repository.Repository, a *authorization.Auth) *Service {
+func New(repo *repository.Repository, cache *cache.Cache) *Service {
 	return &Service{
-		Books: books.Init(repo.Books),
-		Auth:  auth.Init(a.JWT),
+		Books: books.Init(repo.Books, cache),
 	}
 }
