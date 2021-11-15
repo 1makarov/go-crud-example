@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/1makarov/go-cache"
+	"github.com/1makarov/go-crud-example/docs"
 	database "github.com/1makarov/go-crud-example/internal/db"
 	"github.com/1makarov/go-crud-example/internal/db/postgres"
 	"github.com/1makarov/go-crud-example/internal/delivery/http/v1"
@@ -21,13 +23,13 @@ import (
 // @version 1.0
 // @description API Server for Library Application
 
-// @host localhost:8080
-
 // @securityDefinitions.apikey AuthKey
 // @in header
 // @name Authorization
 
 func main() {
+	docs.SwaggerInfo.Host = fmt.Sprintf("localhost:%s", os.Getenv("APP_PORT"))
+
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
 	if err := initConfig(); err != nil {
@@ -57,10 +59,10 @@ func main() {
 	service := services.New(repo, memCache)
 	handler := v1.NewHandler(service, authManager)
 
-	s := server.NewServer(viper.GetString("http.port"), handler.Init())
+	srv := server.NewServer(os.Getenv("APP_PORT"), handler.Init())
 	go func() {
-		if err = s.Run(); err != nil {
-			logrus.Fatalf("error occured while running http server: %s", err.Error())
+		if err = srv.Run(); err != nil {
+			logrus.Errorf("error occured while running http server: %s", err.Error())
 		}
 	}()
 
@@ -70,12 +72,12 @@ func main() {
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	if err = s.Shutdown(context.Background()); err != nil {
-		logrus.Printf("error occured on server shutting down: %s", err.Error())
+	if err = srv.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("error occured on server shutting down: %s", err.Error())
 	}
 
 	if err = db.Close(); err != nil {
-		logrus.Printf("error occured on db connection close: %s", err.Error())
+		logrus.Errorf("error occured on db connection close: %s", err.Error())
 	}
 }
 

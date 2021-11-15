@@ -5,7 +5,7 @@ services:
     build: .
     container_name: library-api
     ports:
-      - "8080:8080"
+      - ${APP_PORT}:${APP_PORT}
     depends_on:
       - postgres
     restart: always

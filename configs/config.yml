@@ -3,6 +3,3 @@ auth:
 
 cache:
   ttl: 10m
-
-http:
-  port: 8080
