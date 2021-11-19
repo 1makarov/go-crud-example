@@ -1,0 +1,5 @@
+auth:
+  ttl: 2h
+
+cache:
+  ttl: 10m

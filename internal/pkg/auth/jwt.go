@@ -1,4 +1,4 @@
-package jwt
+package auth
 
 import (
 	"fmt"
@@ -6,16 +6,22 @@ import (
 	"time"
 )
 
-type JWT struct {
+const errNoSingKey = "empty sign key"
+
+type Manager struct {
 	signingKey string
 	ttl        time.Duration
 }
 
-func Init(signingKey string, ttl time.Duration) *JWT {
-	return &JWT{signingKey: signingKey, ttl: ttl}
+func New(signingKey string, ttl time.Duration) (*Manager, error) {
+	if signingKey == "" {
+		return nil, fmt.Errorf(errNoSingKey)
+	}
+
+	return &Manager{signingKey: signingKey, ttl: ttl}, nil
 }
 
-func (j *JWT) New() (string, error) {
+func (j *Manager) Create() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(j.ttl).Unix(),
 	})
@@ -23,7 +29,7 @@ func (j *JWT) New() (string, error) {
 	return token.SignedString([]byte(j.signingKey))
 }
 
-func (j *JWT) Valid(token string) error {
+func (j *Manager) Validate(token string) error {
 	t, err := jwt.Parse(token, func(token *jwt.Token) (i interface{}, err error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])

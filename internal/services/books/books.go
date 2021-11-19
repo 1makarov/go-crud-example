@@ -2,17 +2,20 @@ package books
 
 import (
 	"context"
+	"github.com/1makarov/go-cache"
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/types"
 )
 
 type Books struct {
-	repo repository.Books
+	repo  repository.Books
+	cache *cache.Cache
 }
 
-func Init(repo repository.Books) *Books {
+func Init(repo repository.Books, cache *cache.Cache) *Books {
 	return &Books{
-		repo: repo,
+		repo:  repo,
+		cache: cache,
 	}
 }
 
@@ -21,7 +24,16 @@ func (b *Books) Create(ctx context.Context, v types.BookCreateInput) error {
 }
 
 func (b *Books) GetByID(ctx context.Context, id int) (*types.Book, error) {
-	return b.repo.GetByID(ctx, id)
+	if value, err := b.cache.Get(id); err == nil {
+		return value.(*types.Book), nil
+	}
+
+	book, err := b.repo.GetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return book, b.cache.Set(id, book)
 }
 
 func (b *Books) GetAll(ctx context.Context) ([]types.Book, error) {
@@ -29,9 +41,43 @@ func (b *Books) GetAll(ctx context.Context) ([]types.Book, error) {
 }
 
 func (b *Books) DeleteByID(ctx context.Context, id int) error {
-	return b.repo.DeleteByID(ctx, id)
+	if err := b.repo.DeleteByID(ctx, id); err != nil {
+		return err
+	}
+
+	_ = b.cache.Delete(id)
+
+	return nil
 }
 
 func (b *Books) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput) error {
-	return b.repo.UpdateByID(ctx, id, v)
+	if err := b.repo.UpdateByID(ctx, id, v); err != nil {
+		return err
+	}
+
+	if value, err := b.cache.GetAndDelete(id); err == nil {
+		book := value.(*types.Book)
+
+		if v.Name != nil {
+			book.Name = *v.Name
+		}
+
+		if v.ISBN != nil {
+			book.ISBN = *v.ISBN
+		}
+
+		if v.Title != nil {
+			book.Title = *v.Title
+		}
+
+		if v.Description != nil {
+			book.Description = *v.Description
+		}
+
+		if err = b.cache.Set(id, book); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

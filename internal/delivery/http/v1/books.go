@@ -9,13 +9,13 @@ import (
 )
 
 func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
-	auth := v1.Group("/books", h.validAuth)
+	auth := v1.Group("/books", h.identity)
 	{
-		auth.POST("/create", h.Create)
-		auth.GET("/get/:id", h.GetByID)
-		auth.GET("/get-all", h.GetAll)
-		auth.DELETE("/delete/:id", h.DeleteByID)
-		auth.POST("/update/:id", h.UpdateByID)
+		auth.POST("/", h.Create)
+		auth.GET("/:id", h.GetByID)
+		auth.GET("/", h.GetAll)
+		auth.DELETE("/:id", h.DeleteByID)
+		auth.PUT("/:id", h.UpdateByID)
 	}
 }
 
@@ -28,7 +28,7 @@ func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
 // @Success 201 "OK"
 // @Failure 400 {object} response
 // @Failure 500 {object} response
-// @Router /api/v1/books/create [post]
+// @Router /api/v1/books/ [post]
 func (h *Handler) Create(c *gin.Context) {
 	var v types.BookCreateInput
 
@@ -56,7 +56,7 @@ func (h *Handler) Create(c *gin.Context) {
 // @Failure 400,404 {object} response
 // @Failure 500 {object} response
 // @Failure default {object} response
-// @Router /api/v1/books/get/{id} [get]
+// @Router /api/v1/books/{id} [get]
 func (h *Handler) GetByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
 	if !ok {
@@ -86,7 +86,7 @@ func (h *Handler) GetByID(c *gin.Context) {
 // @ID get-all-books
 // @Success 200 {object} []types.Book
 // @Failure 500 {object} response
-// @Router /api/v1/books/get-all [get]
+// @Router /api/v1/books/ [get]
 func (h *Handler) GetAll(c *gin.Context) {
 	books, err := h.services.Books.GetAll(c.Request.Context())
 	if err != nil {
@@ -106,7 +106,7 @@ func (h *Handler) GetAll(c *gin.Context) {
 // @Success 200 "OK"
 // @Failure 400 {object} response
 // @Failure 500 {object} response
-// @Router /api/v1/books/delete/{id} [delete]
+// @Router /api/v1/books/{id} [delete]
 func (h *Handler) DeleteByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
 	if !ok {
@@ -138,7 +138,7 @@ func (h *Handler) DeleteByID(c *gin.Context) {
 // @Success 200 "OK"
 // @Failure 400 {object} response
 // @Failure 500 {object} response
-// @Router /api/v1/books/update/{id} [post]
+// @Router /api/v1/books/{id} [put]
 func (h *Handler) UpdateByID(c *gin.Context) {
 	v, ok := c.Params.Get("id")
 	if !ok {

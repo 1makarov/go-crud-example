@@ -23,7 +23,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/create": {
+        "/api/v1/auth/": {
             "get": {
                 "tags": [
                     "auth"
@@ -46,7 +46,36 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/books/create": {
+        "/api/v1/books/": {
+            "get": {
+                "security": [
+                    {
+                        "AuthKey": []
+                    }
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "Get all",
+                "operationId": "get-all-books",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Book"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -88,78 +117,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/books/delete/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
-                "tags": [
-                    "book"
-                ],
-                "summary": "Delete by id",
-                "operationId": "delete-book-by-id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/books/get-all": {
-            "get": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
-                "tags": [
-                    "book"
-                ],
-                "summary": "Get all",
-                "operationId": "get-all-books",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/types.Book"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/books/get/{id}": {
+        "/api/v1/books/{id}": {
             "get": {
                 "security": [
                     {
@@ -213,10 +171,8 @@ var doc = `{
                         }
                     }
                 }
-            }
-        },
-        "/api/v1/books/update/{id}": {
-            "post": {
+            },
+            "put": {
                 "security": [
                     {
                         "AuthKey": []
@@ -243,6 +199,44 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/types.BookUpdateInput"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "AuthKey": []
+                    }
+                ],
+                "tags": [
+                    "book"
+                ],
+                "summary": "Delete by id",
+                "operationId": "delete-book-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -365,7 +359,7 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "localhost:3001",
-	BasePath:    "/",
+	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "Library App API",
 	Description: "API Server for Library Application",

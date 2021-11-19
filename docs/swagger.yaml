@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   types.Book:
     properties:
@@ -57,7 +56,7 @@ info:
   title: Library App API
   version: "1.0"
 paths:
-  /api/v1/auth/create:
+  /api/v1/auth/:
     get:
       operationId: create-auth-token
       responses:
@@ -72,7 +71,25 @@ paths:
       summary: Create
       tags:
       - auth
-  /api/v1/books/create:
+  /api/v1/books/:
+    get:
+      operationId: get-all-books
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Book'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      security:
+      - AuthKey: []
+      summary: Get all
+      tags:
+      - book
     post:
       operationId: create-book
       parameters:
@@ -98,7 +115,7 @@ paths:
       summary: Create
       tags:
       - book
-  /api/v1/books/delete/{id}:
+  /api/v1/books/{id}:
     delete:
       operationId: delete-book-by-id
       parameters:
@@ -123,26 +140,6 @@ paths:
       summary: Delete by id
       tags:
       - book
-  /api/v1/books/get-all:
-    get:
-      operationId: get-all-books
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/types.Book'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/v1.response'
-      security:
-      - AuthKey: []
-      summary: Get all
-      tags:
-      - book
-  /api/v1/books/get/{id}:
     get:
       description: get book by id
       operationId: get-book-by-id
@@ -178,8 +175,7 @@ paths:
       summary: Get by id
       tags:
       - book
-  /api/v1/books/update/{id}:
-    post:
+    put:
       operationId: update-book-by-id
       parameters:
       - description: id
