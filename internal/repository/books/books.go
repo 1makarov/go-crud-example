@@ -7,18 +7,16 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type Books struct {
+type RepoBooks struct {
 	db *sqlx.DB
 }
 
-func NewRepo(db *sqlx.DB) *Books {
-	return &Books{
-		db: db,
-	}
+func NewRepoBooks(db *sqlx.DB) *RepoBooks {
+	return &RepoBooks{db: db}
 }
 
-func (b *Books) Create(ctx context.Context, v types.BookCreateInput) error {
-	if _, err := b.db.NamedExecContext(ctx, `
+func (r *RepoBooks) Create(ctx context.Context, v types.BookCreateInput) error {
+	if _, err := r.db.NamedExecContext(ctx, `
 
 	insert into books (name, title, isbn, description) values (:name, :title, :isbn, :description)
 
@@ -29,20 +27,20 @@ func (b *Books) Create(ctx context.Context, v types.BookCreateInput) error {
 	return nil
 }
 
-func (b *Books) GetByID(ctx context.Context, id int) (*types.Book, error) {
+func (r *RepoBooks) GetByID(ctx context.Context, id int) (*types.Book, error) {
 	var v types.Book
 
-	if err := b.db.GetContext(ctx, &v, `select * from books where id = $1`, id); err != nil {
+	if err := r.db.GetContext(ctx, &v, `select * from books where id = $1`, id); err != nil {
 		return nil, err
 	}
 
 	return &v, nil
 }
 
-func (b *Books) GetAll(ctx context.Context) ([]types.Book, error) {
+func (r *RepoBooks) GetAll(ctx context.Context) ([]types.Book, error) {
 	var v []types.Book
 
-	if err := b.db.SelectContext(ctx, &v, `select * from books`); err != nil {
+	if err := r.db.SelectContext(ctx, &v, `select * from books`); err != nil {
 		return nil, err
 	}
 
@@ -53,8 +51,8 @@ func (b *Books) GetAll(ctx context.Context) ([]types.Book, error) {
 	return v, nil
 }
 
-func (b *Books) DeleteByID(ctx context.Context, id int) error {
-	result, err := b.db.ExecContext(ctx, `delete from books where id = $1`, id)
+func (r *RepoBooks) DeleteByID(ctx context.Context, id int) error {
+	result, err := r.db.ExecContext(ctx, `delete from books where id = $1`, id)
 	if err != nil {
 		return err
 	}
@@ -71,7 +69,7 @@ func (b *Books) DeleteByID(ctx context.Context, id int) error {
 	return nil
 }
 
-func (b *Books) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput) error {
+func (r *RepoBooks) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput) error {
 	var query string
 
 	if v.Description != nil {
@@ -87,9 +85,9 @@ func (b *Books) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput)
 		query += fmt.Sprintf("title = '%s' ", *v.Title)
 	}
 
-	r := fmt.Sprintf("update books set %s where id = %d", query[:len(query)-1], id)
+	s := fmt.Sprintf("update books set %s where id = %d", query[:len(query)-1], id)
 
-	result, err := b.db.ExecContext(ctx, r)
+	result, err := r.db.ExecContext(ctx, s)
 	if err != nil {
 		return err
 	}

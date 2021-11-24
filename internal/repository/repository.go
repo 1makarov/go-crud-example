@@ -21,6 +21,6 @@ type Repository struct {
 
 func New(db *sqlx.DB) *Repository {
 	return &Repository{
-		Books: books.NewRepo(db),
+		Books: books.NewRepoBooks(db),
 	}
 }

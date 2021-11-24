@@ -6,7 +6,7 @@ COPY . /github.com/1makarov/go-crud-example/
 WORKDIR /github.com/1makarov/go-crud-example/
 
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux go build -o ./.bin/app ./cmd/app/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o ./.bin/app ./cmd/main.go
 
 FROM alpine:latest
 

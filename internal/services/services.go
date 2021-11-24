@@ -22,6 +22,6 @@ type Service struct {
 
 func New(repo *repository.Repository, cache *cache.Cache) *Service {
 	return &Service{
-		Books: books.Init(repo.Books, cache),
+		Books: books.InitServiceBooks(repo.Books, cache),
 	}
 }

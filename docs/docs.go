@@ -23,36 +23,8 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/": {
-            "get": {
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Create",
-                "operationId": "create-auth-token",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/v1.responseToken"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/books/": {
             "get": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -71,17 +43,12 @@ var doc = `{
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     }
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -89,7 +56,7 @@ var doc = `{
                 "operationId": "create-book",
                 "parameters": [
                     {
-                        "description": "info",
+                        "description": " ",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -105,13 +72,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     }
                 }
@@ -119,11 +86,6 @@ var doc = `{
         },
         "/api/v1/books/{id}": {
             "get": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "description": "get book by id",
                 "tags": [
                     "book"
@@ -133,7 +95,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id",
+                        "description": " ",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -149,35 +111,30 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     },
                     "default": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     }
                 }
             },
             "put": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -186,13 +143,13 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id",
+                        "description": " ",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "info",
+                        "description": " ",
                         "name": "input",
                         "in": "body",
                         "required": true,
@@ -208,23 +165,18 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     }
                 }
             },
             "delete": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -233,7 +185,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "id",
+                        "description": " ",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -246,13 +198,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/v1.response"
+                            "$ref": "#/definitions/types.ErrorResponse"
                         }
                     }
                 }
@@ -320,28 +272,13 @@ var doc = `{
                 }
             }
         },
-        "v1.response": {
+        "types.ErrorResponse": {
             "type": "object",
             "properties": {
-                "message": {
+                "error": {
                     "type": "string"
                 }
             }
-        },
-        "v1.responseToken": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        }
-    },
-    "securityDefinitions": {
-        "AuthKey": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }`
@@ -358,7 +295,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "localhost:3001",
+	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "Library App API",

@@ -5,7 +5,7 @@ services:
     build: .
     container_name: library-api
     ports:
-      - ${APP_PORT}:${APP_PORT}
+      - ${HTTP_PORT}:${HTTP_PORT}
     depends_on:
       - postgres
     restart: always
@@ -23,8 +23,11 @@ services:
       - "5432:5432"
     env_file:
       - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
     volumes:
-      - ./database_db:/var/lib/postgresql/data/
       - ./schema:/docker-entrypoint-initdb.d
     networks:
       - library

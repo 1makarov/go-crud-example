@@ -2,3 +2,4 @@
 .env
 
 ./database_db
+docker-compose-test.yml
