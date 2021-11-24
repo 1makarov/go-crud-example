@@ -3,6 +3,7 @@ package auth
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"strconv"
 	"time"
 )
 
@@ -21,8 +22,10 @@ func New(signingKey string, ttl time.Duration) (*Manager, error) {
 	return &Manager{signingKey: signingKey, ttl: ttl}, nil
 }
 
-func (j *Manager) Create() (string, error) {
+func (j *Manager) Create(id int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Subject:   strconv.Itoa(id),
+		IssuedAt:  time.Now().Unix(),
 		ExpiresAt: time.Now().Add(j.ttl).Unix(),
 	})
 

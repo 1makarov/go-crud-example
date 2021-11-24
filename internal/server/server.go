@@ -2,28 +2,22 @@ package server
 
 import (
 	"context"
+	"github.com/1makarov/go-crud-example/config"
 	"net/http"
-	"time"
-)
-
-const (
-	rTimeout       = 10 * time.Second
-	wTimeout       = 10 * time.Second
-	maxHeaderBytes = 1 << 20
 )
 
 type Server struct {
 	httpServer *http.Server
 }
 
-func NewServer(port string, handler http.Handler) *Server {
+func NewServer(cfg config.HTTPConfig, handler http.Handler) *Server {
 	return &Server{
 		httpServer: &http.Server{
-			Addr:           ":" + port,
+			Addr:           ":" + cfg.Port,
 			Handler:        handler,
-			ReadTimeout:    rTimeout,
-			WriteTimeout:   wTimeout,
-			MaxHeaderBytes: maxHeaderBytes,
+			ReadTimeout:    cfg.ReadTimeout,
+			WriteTimeout:   cfg.WriteTimeout,
+			MaxHeaderBytes: cfg.MaxHeaderMegabytes,
 		},
 	}
 }
@@ -32,6 +26,6 @@ func (s *Server) Run() error {
 	return s.httpServer.ListenAndServe()
 }
 
-func (s *Server) Shutdown(ctx context.Context) error {
+func (s *Server) Stop(ctx context.Context) error {
 	return s.httpServer.Shutdown(ctx)
 }

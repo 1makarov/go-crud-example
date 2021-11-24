@@ -39,38 +39,40 @@ definitions:
       title:
         type: string
     type: object
-  v1.response:
+  types.ErrorResponse:
     properties:
-      message:
+      error:
         type: string
     type: object
-  v1.responseToken:
+  types.SignInInput:
     properties:
-      token:
+      email:
         type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
     type: object
-host: localhost:3001
+  types.SignUpInput:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
 info:
   contact: {}
   description: API Server for Library Application
   title: Library App API
   version: "1.0"
 paths:
-  /api/v1/auth/:
-    get:
-      operationId: create-auth-token
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/v1.responseToken'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/v1.response'
-      summary: Create
-      tags:
-      - auth
   /api/v1/books/:
     get:
       operationId: get-all-books
@@ -84,7 +86,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
       security:
       - AuthKey: []
       summary: Get all
@@ -93,7 +95,7 @@ paths:
     post:
       operationId: create-book
       parameters:
-      - description: info
+      - description: ' '
         in: body
         name: input
         required: true
@@ -105,11 +107,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
       security:
       - AuthKey: []
       summary: Create
@@ -119,7 +121,7 @@ paths:
     delete:
       operationId: delete-book-by-id
       parameters:
-      - description: id
+      - description: ' '
         in: path
         name: id
         required: true
@@ -130,11 +132,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
       security:
       - AuthKey: []
       summary: Delete by id
@@ -144,7 +146,7 @@ paths:
       description: get book by id
       operationId: get-book-by-id
       parameters:
-      - description: id
+      - description: ' '
         in: path
         name: id
         required: true
@@ -157,19 +159,19 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
       security:
       - AuthKey: []
       summary: Get by id
@@ -178,12 +180,12 @@ paths:
     put:
       operationId: update-book-by-id
       parameters:
-      - description: id
+      - description: ' '
         in: path
         name: id
         required: true
         type: string
-      - description: info
+      - description: ' '
         in: body
         name: input
         required: true
@@ -195,16 +197,56 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/v1.response'
+            $ref: '#/definitions/types.ErrorResponse'
       security:
       - AuthKey: []
       summary: Update by id
       tags:
       - book
+  /api/v1/users/sign-in:
+    post:
+      operationId: sign-in
+      parameters:
+      - description: ' '
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.SignInInput'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: SignIn
+      tags:
+      - auth
+  /api/v1/users/sign-up:
+    post:
+      operationId: sign-up
+      parameters:
+      - description: ' '
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.SignUpInput'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: SignUp
+      tags:
+      - auth
 securityDefinitions:
   AuthKey:
     in: header

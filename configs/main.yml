@@ -1,0 +1,10 @@
+http:
+  maxHeaderBytes: 1
+  readTimeout: 10s
+  writeTimeout: 10s
+
+auth:
+  ttl: 2h
+
+cache:
+  ttl: 10m
