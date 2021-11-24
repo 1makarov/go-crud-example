@@ -9,7 +9,7 @@ import (
 )
 
 func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
-	auth := v1.Group("/books")
+	auth := v1.Group("/books", h.identity)
 	{
 		auth.POST("/", h.Create)
 		auth.GET("/:id", h.GetByID)
@@ -21,6 +21,7 @@ func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
 
 // Create Book
 // @Summary Create
+// @Security AuthKey
 // @Tags book
 // @ID create-book
 // @Param input body types.BookCreateInput true " "
@@ -46,6 +47,7 @@ func (h *Handler) Create(c *gin.Context) {
 
 // GetByID
 // @Summary Get by id
+// @Security AuthKey
 // @Tags book
 // @Description get book by id
 // @ID get-book-by-id
@@ -79,6 +81,7 @@ func (h *Handler) GetByID(c *gin.Context) {
 
 // GetAll
 // @Summary Get all
+// @Security AuthKey
 // @Tags book
 // @ID get-all-books
 // @Success 200 {object} []types.Book
@@ -96,6 +99,7 @@ func (h *Handler) GetAll(c *gin.Context) {
 
 // DeleteByID
 // @Summary Delete by id
+// @Security AuthKey
 // @Tags book
 // @ID delete-book-by-id
 // @Param id path string true " "
@@ -126,6 +130,7 @@ func (h *Handler) DeleteByID(c *gin.Context) {
 
 // UpdateByID
 // @Summary Update by id
+// @Security AuthKey
 // @Tags book
 // @ID update-book-by-id
 // @Param id path string true " "
