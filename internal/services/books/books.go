@@ -41,13 +41,7 @@ func (b *ServiceBooks) GetAll(ctx context.Context) ([]types.Book, error) {
 }
 
 func (b *ServiceBooks) DeleteByID(ctx context.Context, id int) error {
-	if err := b.repo.DeleteByID(ctx, id); err != nil {
-		return err
-	}
-
-	b.cache.Delete(id)
-
-	return nil
+	return b.repo.DeleteByID(ctx, id)
 }
 
 func (b *ServiceBooks) UpdateByID(ctx context.Context, id int, v types.BookUpdateInput) error {
