@@ -25,11 +25,6 @@ var doc = `{
     "paths": {
         "/api/v1/books/": {
             "get": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -54,11 +49,6 @@ var doc = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -96,11 +86,6 @@ var doc = `{
         },
         "/api/v1/books/{id}": {
             "get": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "description": "get book by id",
                 "tags": [
                     "book"
@@ -150,11 +135,6 @@ var doc = `{
                 }
             },
             "put": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -197,11 +177,6 @@ var doc = `{
                 }
             },
             "delete": {
-                "security": [
-                    {
-                        "AuthKey": []
-                    }
-                ],
                 "tags": [
                     "book"
                 ],
@@ -228,68 +203,6 @@ var doc = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/users/sign-in": {
-            "post": {
-                "tags": [
-                    "auth"
-                ],
-                "summary": "SignIn",
-                "operationId": "sign-in",
-                "parameters": [
-                    {
-                        "description": " ",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/types.SignInInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/types.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/users/sign-up": {
-            "post": {
-                "tags": [
-                    "auth"
-                ],
-                "summary": "SignUp",
-                "operationId": "sign-up",
-                "parameters": [
-                    {
-                        "description": " ",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/types.SignUpInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/types.ErrorResponse"
                         }
@@ -366,47 +279,6 @@ var doc = `{
                     "type": "string"
                 }
             }
-        },
-        "types.SignInInput": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.SignUpInput": {
-            "type": "object",
-            "required": [
-                "email",
-                "name",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        }
-    },
-    "securityDefinitions": {
-        "AuthKey": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }`

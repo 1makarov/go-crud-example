@@ -17,7 +17,6 @@ type (
 		Environment string
 		DB          db.ConfigDB
 		HTTP        HTTPConfig
-		Auth        AuthConfig
 		CacheTTL    time.Duration `mapstructure:"ttl"`
 	}
 
@@ -27,16 +26,6 @@ type (
 		ReadTimeout        time.Duration `mapstructure:"readTimeout"`
 		WriteTimeout       time.Duration `mapstructure:"writeTimeout"`
 		MaxHeaderMegabytes int           `mapstructure:"maxHeaderBytes"`
-	}
-
-	AuthConfig struct {
-		JWT          JWTConfig
-		PasswordSalt string
-	}
-
-	JWTConfig struct {
-		AccessTokenTTL time.Duration `mapstructure:"ttl"`
-		SigningKey     string
 	}
 )
 
@@ -61,10 +50,6 @@ func unmarshal(cfg *Config) error {
 		return err
 	}
 
-	if err := viper.UnmarshalKey("auth", &cfg.Auth.JWT); err != nil {
-		return err
-	}
-
 	return viper.UnmarshalKey("cache.ttl", &cfg.CacheTTL)
 }
 
@@ -76,9 +61,6 @@ func setFromEnv(cfg *Config) {
 	cfg.DB.User = os.Getenv("DB_USER")
 	cfg.DB.Host = os.Getenv("DB_HOST")
 	cfg.DB.Password = os.Getenv("DB_PASSWORD")
-
-	cfg.Auth.JWT.SigningKey = os.Getenv("JWT_SIGNING_KEY")
-	cfg.Auth.PasswordSalt = os.Getenv("PASSWORD_SALT")
 
 	cfg.Environment = os.Getenv("ENV")
 }

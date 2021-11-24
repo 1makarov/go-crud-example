@@ -5,8 +5,6 @@ import (
 	"github.com/1makarov/go-cache"
 	"github.com/1makarov/go-crud-example/config"
 	"github.com/1makarov/go-crud-example/internal/db/postgres"
-	"github.com/1makarov/go-crud-example/internal/pkg/auth"
-	"github.com/1makarov/go-crud-example/internal/pkg/hash"
 	"github.com/1makarov/go-crud-example/internal/pkg/signaler"
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
@@ -18,10 +16,6 @@ import (
 // @title Library App API
 // @version 1.0
 // @description API Server for Library Application
-
-// @securityDefinitions.apikey AuthKey
-// @in header
-// @name Authorization
 
 const configsDir = "configs"
 
@@ -40,16 +34,10 @@ func main() {
 		logrus.Fatalf("error open db: %s\n", err.Error())
 	}
 
-	authManager, err := auth.New(cfg.Auth.JWT.SigningKey, cfg.Auth.JWT.AccessTokenTTL)
-	if err != nil {
-		logrus.Fatalf("error create auth: %s\n", err.Error())
-	}
-
-	hashManager := hash.New(cfg.Auth.PasswordSalt)
 	memCache := cache.NewWithInterval(cfg.CacheTTL)
 
 	repo := repository.New(db)
-	service := services.New(repo, memCache, hashManager, authManager)
+	service := services.New(repo, memCache)
 	handler := http.NewHandler(service)
 
 	srv := server.NewServer(cfg.HTTP, handler.Init(cfg))

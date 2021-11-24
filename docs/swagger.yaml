@@ -44,29 +44,6 @@ definitions:
       error:
         type: string
     type: object
-  types.SignInInput:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    required:
-    - email
-    - password
-    type: object
-  types.SignUpInput:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        type: string
-    required:
-    - email
-    - name
-    - password
-    type: object
 info:
   contact: {}
   description: API Server for Library Application
@@ -87,8 +64,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/types.ErrorResponse'
-      security:
-      - AuthKey: []
       summary: Get all
       tags:
       - book
@@ -112,8 +87,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/types.ErrorResponse'
-      security:
-      - AuthKey: []
       summary: Create
       tags:
       - book
@@ -137,8 +110,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/types.ErrorResponse'
-      security:
-      - AuthKey: []
       summary: Delete by id
       tags:
       - book
@@ -172,8 +143,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/types.ErrorResponse'
-      security:
-      - AuthKey: []
       summary: Get by id
       tags:
       - book
@@ -202,54 +171,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/types.ErrorResponse'
-      security:
-      - AuthKey: []
       summary: Update by id
       tags:
       - book
-  /api/v1/users/sign-in:
-    post:
-      operationId: sign-in
-      parameters:
-      - description: ' '
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/types.SignInInput'
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/types.ErrorResponse'
-      summary: SignIn
-      tags:
-      - auth
-  /api/v1/users/sign-up:
-    post:
-      operationId: sign-up
-      parameters:
-      - description: ' '
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/types.SignUpInput'
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/types.ErrorResponse'
-      summary: SignUp
-      tags:
-      - auth
-securityDefinitions:
-  AuthKey:
-    in: header
-    name: Authorization
-    type: apiKey
 swagger: "2.0"
