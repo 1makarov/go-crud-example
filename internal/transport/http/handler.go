@@ -6,6 +6,7 @@ import (
 	"github.com/1makarov/go-crud-example/docs"
 	"github.com/1makarov/go-crud-example/internal/services"
 	v1 "github.com/1makarov/go-crud-example/internal/transport/http/v1"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -22,8 +23,10 @@ func NewHandler(services *services.Service) *Handler {
 	}
 }
 
-func (h *Handler) Init(cfg *config.Config) *gin.Engine {
+func (h *Handler) Init(cfg *config.Config, store sessions.Store) *gin.Engine {
 	router := gin.Default()
+
+	router.Use(sessions.Sessions("session", store))
 
 	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s", cfg.HTTP.Host, cfg.HTTP.Port)
 	if cfg.Environment != config.EnvLocal {

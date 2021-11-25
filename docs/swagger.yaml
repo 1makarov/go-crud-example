@@ -44,6 +44,29 @@ definitions:
       error:
         type: string
     type: object
+  types.SignInInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  types.SignUpInput:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
 info:
   contact: {}
   description: API Server for Library Application
@@ -174,4 +197,57 @@ paths:
       summary: Update by id
       tags:
       - book
+  /api/v1/users/auth/log-out:
+    get:
+      operationId: log-out
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: Log out
+      tags:
+      - auth
+  /api/v1/users/auth/sign-in:
+    post:
+      operationId: sign-in
+      parameters:
+      - description: ' '
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.SignInInput'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: Sign in
+      tags:
+      - auth
+  /api/v1/users/auth/sign-up:
+    post:
+      operationId: sign-up
+      parameters:
+      - description: ' '
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.SignUpInput'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.ErrorResponse'
+      summary: Sign up
+      tags:
+      - auth
 swagger: "2.0"

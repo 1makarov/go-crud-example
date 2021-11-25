@@ -9,7 +9,7 @@ import (
 )
 
 func (h *Handler) InitBooksRouter(v1 *gin.RouterGroup) {
-	auth := v1.Group("/books")
+	auth := v1.Group("/books", h.identity)
 	{
 		auth.POST("/", h.Create)
 		auth.GET("/:id", h.GetByID)

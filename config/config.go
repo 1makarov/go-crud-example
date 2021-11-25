@@ -16,6 +16,8 @@ type (
 	Config struct {
 		Environment string
 		DB          db.ConfigDB
+		Auth        AuthConfig
+		Redis       Redis
 		HTTP        HTTPConfig
 		CacheTTL    time.Duration `mapstructure:"ttl"`
 	}
@@ -26,6 +28,15 @@ type (
 		ReadTimeout        time.Duration `mapstructure:"readTimeout"`
 		WriteTimeout       time.Duration `mapstructure:"writeTimeout"`
 		MaxHeaderMegabytes int           `mapstructure:"maxHeaderBytes"`
+	}
+
+	AuthConfig struct {
+		PasswordSalt string
+	}
+
+	Redis struct {
+		DB   db.ConfigDB
+		Salt string
 	}
 )
 
@@ -61,6 +72,14 @@ func setFromEnv(cfg *Config) {
 	cfg.DB.User = os.Getenv("DB_USER")
 	cfg.DB.Host = os.Getenv("DB_HOST")
 	cfg.DB.Password = os.Getenv("DB_PASSWORD")
+
+	cfg.Redis.DB.Name = os.Getenv("REDIS_NAME")
+	cfg.Redis.DB.Host = os.Getenv("REDIS_HOST")
+	cfg.Redis.DB.Password = os.Getenv("REDIS_PASSWORD")
+	cfg.Redis.DB.Port = os.Getenv("REDIS_PORT")
+	cfg.Redis.Salt = os.Getenv("REDIS_SALT")
+
+	cfg.Auth.PasswordSalt = os.Getenv("PASSWORD_SALT")
 
 	cfg.Environment = os.Getenv("ENV")
 }
