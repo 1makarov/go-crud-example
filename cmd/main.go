@@ -5,6 +5,8 @@ import (
 	"github.com/1makarov/go-cache"
 	"github.com/1makarov/go-crud-example/config"
 	"github.com/1makarov/go-crud-example/internal/db/postgres"
+	"github.com/1makarov/go-crud-example/internal/db/redis"
+	"github.com/1makarov/go-crud-example/internal/pkg/hash"
 	"github.com/1makarov/go-crud-example/internal/pkg/signaler"
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/server"
@@ -34,13 +36,19 @@ func main() {
 		logrus.Fatalf("error open db: %s\n", err.Error())
 	}
 
-	memCache := cache.NewWithInterval(cfg.CacheTTL)
+	store, err := redis.Open(cfg.Redis.DB, cfg.Redis.Salt)
+	if err != nil {
+		logrus.Fatalf("error open redis: %s\n", err.Error())
+	}
+
+	hashManager := hash.New(cfg.Auth.PasswordSalt)
+	cacheManager := cache.NewWithInterval(cfg.CacheTTL)
 
 	repo := repository.New(db)
-	service := services.New(repo, memCache)
+	service := services.New(repo, cacheManager, hashManager)
 	handler := http.NewHandler(service)
 
-	srv := server.NewServer(cfg.HTTP, handler.Init(cfg))
+	srv := server.NewServer(cfg.HTTP, handler.Init(cfg, store))
 	go func() {
 		if err = srv.Run(); err != nil {
 			logrus.Errorf("error occured while running http server: %s", err.Error())

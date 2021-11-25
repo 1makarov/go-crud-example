@@ -8,12 +8,12 @@ services:
       - ${HTTP_PORT}:${HTTP_PORT}
     depends_on:
       - postgres
+      - redis
     restart: always
     env_file:
       - .env
     networks:
       - library
-
 
   postgres:
     image: postgres:latest
@@ -29,6 +29,19 @@ services:
       - POSTGRES_USER=${DB_USER}
     volumes:
       - ./schema:/docker-entrypoint-initdb.d
+    networks:
+      - library
+
+  redis:
+    image: bitnami/redis
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    env_file:
+      - .env
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     networks:
       - library
 
