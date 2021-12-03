@@ -13,8 +13,5 @@ func Open(cfg db.ConfigDB) (*sqlx.DB, error) {
 		return nil, err
 	}
 
-	client.SetMaxIdleConns(200)
-	client.SetMaxOpenConns(50)
-
 	return client, nil
 }
