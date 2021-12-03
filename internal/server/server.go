@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/1makarov/go-crud-example/config"
+	"github.com/1makarov/go-crud-example/internal/config"
 	"net/http"
 )
 

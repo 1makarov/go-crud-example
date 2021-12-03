@@ -2,10 +2,10 @@ package users
 
 import (
 	"context"
-	"github.com/1makarov/go-crud-example/internal/pkg/auth"
-	"github.com/1makarov/go-crud-example/internal/pkg/hash"
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/types"
+	"github.com/1makarov/go-crud-example/pkg/auth"
+	"github.com/1makarov/go-crud-example/pkg/hash"
 )
 
 type Users struct {

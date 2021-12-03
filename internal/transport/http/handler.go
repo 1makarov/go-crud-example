@@ -2,8 +2,8 @@ package http
 
 import (
 	"fmt"
-	"github.com/1makarov/go-crud-example/config"
 	"github.com/1makarov/go-crud-example/docs"
+	"github.com/1makarov/go-crud-example/internal/config"
 	"github.com/1makarov/go-crud-example/internal/services"
 	v1 "github.com/1makarov/go-crud-example/internal/transport/http/v1"
 	"github.com/gin-gonic/gin"

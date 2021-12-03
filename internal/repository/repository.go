@@ -22,8 +22,8 @@ type Users interface {
 }
 
 type Repository struct {
-	Books
-	Users
+	Books Books
+	Users Users
 }
 
 func New(db *sqlx.DB) *Repository {

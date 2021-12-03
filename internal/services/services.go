@@ -3,12 +3,12 @@ package services
 import (
 	"context"
 	"github.com/1makarov/go-cache"
-	"github.com/1makarov/go-crud-example/internal/pkg/auth"
-	"github.com/1makarov/go-crud-example/internal/pkg/hash"
 	"github.com/1makarov/go-crud-example/internal/repository"
 	"github.com/1makarov/go-crud-example/internal/services/books"
 	"github.com/1makarov/go-crud-example/internal/services/users"
 	"github.com/1makarov/go-crud-example/internal/types"
+	"github.com/1makarov/go-crud-example/pkg/auth"
+	"github.com/1makarov/go-crud-example/pkg/hash"
 )
 
 type Books interface {
@@ -26,8 +26,8 @@ type Users interface {
 }
 
 type Service struct {
-	Books
-	Users
+	Books Books
+	Users Users
 }
 
 func New(repo *repository.Repository, cache *cache.Cache, hash *hash.Manager, auth *auth.Manager) *Service {
