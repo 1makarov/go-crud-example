@@ -40,7 +40,7 @@ func main() {
 
 	db, err := postgres.Open(cfg.DB)
 	if err != nil {
-		logrus.Errorln("error open db: %x\n", err)
+		logrus.Errorln("error open db: %v\n", err)
 		return
 	}
 	defer func() {
@@ -51,7 +51,7 @@ func main() {
 
 	authManager, err := auth.New(cfg.Auth.JWT.SigningKey, cfg.Auth.JWT.AccessTokenTTL)
 	if err != nil {
-		logrus.Errorln("error create auth: %x\n", err)
+		logrus.Errorln("error create auth: %v\n", err)
 		return
 	}
 
